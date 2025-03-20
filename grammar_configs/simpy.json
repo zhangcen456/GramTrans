@@ -1,0 +1,13 @@
+{
+    "import":[
+        "simpy.simple_statement.json",
+        "simpy.compound_statement.json",
+        "simpy.format.json"
+    ],
+    "both":[],
+    "ori_to_new":[
+        {"condition":{"parent_type":"line_continuation"},"action":"replace","content":"","update_grammar":false}
+    ],
+    "new_to_ori":[
+    ]
+}

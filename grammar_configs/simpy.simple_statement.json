@@ -1,0 +1,39 @@
+{
+    "import":[
+        "simpy.expression.json"
+    ],
+    "both":[
+        {"parent":"import_statement","original":"import","new":"<import_stmt>"},
+        {"parent":"future_import_statement","original":["from","__future__","import"],"new":["<import_from_future_stmt>"]},
+        {"parent":"import_from_statement",
+            "original":["from",{"field":"module_name","anchor":true},"import"],
+            "new":["<import_from_stmt>",{"field":"module_name","anchor":true}," "]},
+        {"parent":"_import_list","original":",","new":" "},
+        {"parent":"aliased_import","original":"as","new":"<as>"},
+        {"parent":"print_statement","original":"print","new":"<print>"},
+        {"parent":"print_statement","original":",","new":" "},
+        {"parent":"assert_statement","original":"assert","new":"<assert_stmt>"},
+        {"parent":"assert_statement","original":",","new":" "},
+        {"parent":"return_statement","original":"return","new":"<return>"},
+        {"parent":"delete_statement","original":"del","new":"<del_stmt>"},
+        {"parent":"raise_statement","original":"raise","new":"<raise>"},
+        {"parent":"raise_statement","original":"from","new":"<from>"},
+        {"parent":"pass_statement","original":"pass","new":"<pass>"},
+        {"parent":"break_statement","original":"break","new":"<break>"},
+        {"parent":"continue_statement","original":"continue","new":"<continue>"},
+        {"parent":"global_statement","original":"global","new":"<global>"},
+        {"parent":"global_statement","original":",","new":" "},
+        {"parent":"nonlocal_statement","original":"nonlocal","new":"<nonlocal>"},
+        {"parent":"nonlocal_statement","original":",","new":" "},
+        {"parent":"exec_statement","original":"exec","new":"<exec>"},
+        {"parent":"exec_statement","original":"in","new":"<in>"},
+        {"parent":"exec_statement","original":",","new":" "},
+        {"parent":"type_alias_statement","original":[{"type":"type","prev_sibling":null}],"new":[{"type":"<type>"}]}
+    ],
+    "ori_to_new":[
+        {"condition":{"parent_type":"import_from_statement","type":"("},"action":"delete"},
+        {"condition":{"parent_type":"import_from_statement","type":")"},"action":"delete"},
+        {"condition":{"parent_type":"future_import_statement","type":"("},"action":"delete"},
+        {"condition":{"parent_type":"future_import_statement","type":")"},"action":"delete"}
+    ]
+}

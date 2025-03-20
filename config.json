@@ -1,0 +1,9 @@
+{
+    "language":"python",
+    "original_grammar":"/home/cenyuan/GramTrans/tree-sitter-python",
+    "new_grammar":"/home/cenyuan/GramTrans/new_grammar",
+    "original_library":"/home/cenyuan/GramTrans/build/python-language.so",
+    "new_library":"/home/cenyuan/GramTrans/build/new-language.so",
+    "ori_to_new":"/home/cenyuan/GramTrans/grammar_configs/simpy.ori_to_new.json",
+    "new_to_ori":"/home/cenyuan/GramTrans/grammar_configs/simpy.new_to_ori.json"
+}

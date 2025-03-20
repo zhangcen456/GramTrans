@@ -1,0 +1,1561 @@
+[
+  {
+    "condition": {
+      "next_sibling_field": "condition",
+      "type": "<if_stmt>",
+      "parent_type": "if_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "if"
+    }
+  },
+  {
+    "condition": {
+      "field": "condition",
+      "parent_type": "if_statement"
+    },
+    "action": "insert_after",
+    "content": [
+      {
+        "type": ":"
+      }
+    ]
+  },
+  {
+    "condition": {
+      "next_sibling_field": "condition",
+      "type": "<elif_stmt>",
+      "parent_type": "elif_clause"
+    },
+    "action": "replace",
+    "content": {
+      "type": "elif"
+    }
+  },
+  {
+    "condition": {
+      "field": "condition",
+      "parent_type": "elif_clause"
+    },
+    "action": "insert_after",
+    "content": [
+      {
+        "type": ":"
+      }
+    ]
+  },
+  {
+    "condition": {
+      "type": "<else_stmt>",
+      "parent_type": "else_clause"
+    },
+    "action": "replace",
+    "content": {
+      "type": "else"
+    }
+  },
+  {
+    "condition": {
+      "type": "<else_stmt>",
+      "parent_type": "else_clause"
+    },
+    "action": "insert_after",
+    "content": [
+      {
+        "type": ":"
+      }
+    ]
+  },
+  {
+    "condition": {
+      "type": "<async_keyword>",
+      "parent_type": "for_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "async"
+    }
+  },
+  {
+    "condition": {
+      "next_sibling_field": "left",
+      "type": "<for_stmt>",
+      "parent_type": "for_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "for"
+    }
+  },
+  {
+    "condition": {
+      "prev_sibling_field": "left",
+      "next_sibling_field": "right",
+      "type": " ",
+      "parent_type": "for_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "in"
+    }
+  },
+  {
+    "condition": {
+      "field": "right",
+      "parent_type": "for_statement"
+    },
+    "action": "insert_after",
+    "content": [
+      {
+        "type": ":"
+      }
+    ]
+  },
+  {
+    "condition": {
+      "next_sibling_field": "condition",
+      "type": "<while_stmt>",
+      "parent_type": "while_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "while"
+    }
+  },
+  {
+    "condition": {
+      "field": "condition",
+      "parent_type": "while_statement"
+    },
+    "action": "insert_after",
+    "content": [
+      {
+        "type": ":"
+      }
+    ]
+  },
+  {
+    "condition": {
+      "next_sibling_field": "body",
+      "type": "<try_stmt>",
+      "parent_type": "try_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "try"
+    }
+  },
+  {
+    "condition": {
+      "type": "<try_stmt>",
+      "next_sibling_field": "body",
+      "parent_type": "try_statement"
+    },
+    "action": "insert_after",
+    "content": [
+      {
+        "type": ":"
+      }
+    ]
+  },
+  {
+    "condition": {
+      "type": "<except_stmt>",
+      "parent_type": "except_clause"
+    },
+    "action": "replace",
+    "content": {
+      "type": "except"
+    }
+  },
+  {
+    "condition": {
+      "type": "<as>",
+      "parent_type": "except_clause"
+    },
+    "action": "replace",
+    "content": {
+      "type": "as"
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "except_clause"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": "$block",
+      "parent_type": "except_clause"
+    },
+    "action": "insert_before",
+    "content": [
+      {
+        "type": ":"
+      }
+    ]
+  },
+  {
+    "condition": {
+      "next_sibling": [
+        "$comparison_operator",
+        "$not_operator",
+        "$boolean_operator",
+        "$lambda",
+        "$await",
+        "$binary_operator",
+        "$identifier",
+        "$string",
+        "$concatenated_string",
+        "$integer",
+        "$float",
+        "$true",
+        "$false",
+        "$none",
+        "$unary_operator",
+        "$attribute",
+        "$subscript",
+        "$call",
+        "$list",
+        "$list_comprehension",
+        "$dictionary",
+        "$dictionary_comprehension",
+        "$set",
+        "$set_comprehension",
+        "$tuple",
+        "$parenthesized_expression",
+        "$generator_expression",
+        "$ellipsis",
+        "$list_splat",
+        "$conditional_expression",
+        "$named_expression",
+        "$as_pattern"
+      ],
+      "type": "<except_group_stmt>",
+      "parent_type": "except_group_clause"
+    },
+    "action": "replace",
+    "content": {
+      "type": "except*"
+    }
+  },
+  {
+    "condition": {
+      "prev_sibling": [
+        "$comparison_operator",
+        "$not_operator",
+        "$boolean_operator",
+        "$lambda",
+        "$await",
+        "$binary_operator",
+        "$identifier",
+        "$string",
+        "$concatenated_string",
+        "$integer",
+        "$float",
+        "$true",
+        "$false",
+        "$none",
+        "$unary_operator",
+        "$attribute",
+        "$subscript",
+        "$call",
+        "$list",
+        "$list_comprehension",
+        "$dictionary",
+        "$dictionary_comprehension",
+        "$set",
+        "$set_comprehension",
+        "$tuple",
+        "$parenthesized_expression",
+        "$generator_expression",
+        "$ellipsis",
+        "$list_splat",
+        "$conditional_expression",
+        "$named_expression",
+        "$as_pattern"
+      ],
+      "type": "<as>",
+      "parent_type": "except_group_clause"
+    },
+    "action": "replace",
+    "content": {
+      "type": "as"
+    }
+  },
+  {
+    "condition": {
+      "type": "$block",
+      "parent_type": "except_group_clause"
+    },
+    "action": "insert_before",
+    "content": [
+      {
+        "type": ":"
+      }
+    ]
+  },
+  {
+    "condition": {
+      "type": "<finally_stmt>",
+      "parent_type": "finally_clause"
+    },
+    "action": "replace",
+    "content": {
+      "type": "finally"
+    }
+  },
+  {
+    "condition": {
+      "type": "<finally_stmt>",
+      "parent_type": "finally_clause"
+    },
+    "action": "insert_after",
+    "content": [
+      {
+        "type": ":"
+      }
+    ]
+  },
+  {
+    "condition": {
+      "type": "<async_keyword>",
+      "parent_type": "with_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "async"
+    }
+  },
+  {
+    "condition": {
+      "next_sibling": "$with_clause",
+      "type": "<with_stmt>",
+      "parent_type": "with_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "with"
+    }
+  },
+  {
+    "condition": {
+      "type": "$with_clause",
+      "parent_type": "with_statement"
+    },
+    "action": "insert_after",
+    "content": [
+      {
+        "type": ":"
+      }
+    ]
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "with_clause"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": "<async_keyword>",
+      "parent_type": "function_definition"
+    },
+    "action": "replace",
+    "content": {
+      "type": "async"
+    }
+  },
+  {
+    "condition": {
+      "type": "<def_stmt>",
+      "parent_type": "function_definition"
+    },
+    "action": "replace",
+    "content": {
+      "type": "def"
+    }
+  },
+  {
+    "condition": {
+      "type": "<arrow>",
+      "parent_type": "function_definition"
+    },
+    "action": "replace",
+    "content": {
+      "type": "->"
+    }
+  },
+  {
+    "condition": {
+      "type": "$block",
+      "parent_type": "function_definition"
+    },
+    "action": "insert_before",
+    "content": [
+      {
+        "type": ":"
+      }
+    ]
+  },
+  {
+    "condition": {
+      "prev_sibling": null,
+      "parent_type": "parameters"
+    },
+    "action": "insert_before",
+    "content": [
+      {
+        "type": "("
+      }
+    ]
+  },
+  {
+    "condition": {
+      "next_sibling": null,
+      "parent_type": "parameters"
+    },
+    "action": "insert_after",
+    "content": [
+      {
+        "type": ")"
+      }
+    ]
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "_parameters"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": "<class_stmt>",
+      "parent_type": "class_definition"
+    },
+    "action": "replace",
+    "content": {
+      "type": "class"
+    }
+  },
+  {
+    "condition": {
+      "type": "$block",
+      "parent_type": "class_definition"
+    },
+    "action": "insert_before",
+    "content": [
+      {
+        "type": ":"
+      }
+    ]
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "type_parameter"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "argument_list"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": "<match_stmt>",
+      "parent_type": "match_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "match"
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "match_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "field": "body",
+      "parent_type": "match_statement"
+    },
+    "action": "insert_before",
+    "content": [
+      {
+        "type": ":"
+      }
+    ]
+  },
+  {
+    "condition": {
+      "type": "<block_start>",
+      "parent_type": "_match_block"
+    },
+    "action": "delete"
+  },
+  {
+    "condition": {
+      "type": "<block_end>",
+      "parent_type": "_match_block"
+    },
+    "action": "delete"
+  },
+  {
+    "condition": {
+      "type": "<case_stmt>",
+      "parent_type": "case_clause"
+    },
+    "action": "replace",
+    "content": {
+      "type": "case"
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "case_clause"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "field": "consequence",
+      "parent_type": "case_clause"
+    },
+    "action": "insert_before",
+    "content": [
+      {
+        "type": ":"
+      }
+    ]
+  },
+  {
+    "condition": {
+      "type": "<as>",
+      "parent_type": "_as_pattern"
+    },
+    "action": "replace",
+    "content": {
+      "type": "as"
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "_list_pattern"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "_tuple_pattern"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "dict_pattern"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "class_pattern"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": "<if>",
+      "parent_type": "if_clause"
+    },
+    "action": "replace",
+    "content": {
+      "type": "if"
+    }
+  },
+  {
+    "condition": {
+      "type": "<block_start>",
+      "parent_type": "block"
+    },
+    "action": "delete"
+  },
+  {
+    "condition": {
+      "type": "<block_end>",
+      "parent_type": "block"
+    },
+    "action": "delete"
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "for_in_clause"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": "<import_stmt>",
+      "parent_type": "import_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "import"
+    }
+  },
+  {
+    "condition": {
+      "type": "<import_from_future_stmt>",
+      "parent_type": "future_import_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "from"
+    }
+  },
+  {
+    "condition": {
+      "type": "<import_from_future_stmt>",
+      "parent_type": "future_import_statement"
+    },
+    "action": "insert_after",
+    "content": [
+      {
+        "type": "__future__"
+      },
+      {
+        "type": "import"
+      }
+    ]
+  },
+  {
+    "condition": {
+      "next_sibling_field": "module_name",
+      "type": "<import_from_stmt>",
+      "parent_type": "import_from_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "from"
+    }
+  },
+  {
+    "condition": {
+      "prev_sibling_field": "module_name",
+      "type": " ",
+      "parent_type": "import_from_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "import"
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "_import_list"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": "<as>",
+      "parent_type": "aliased_import"
+    },
+    "action": "replace",
+    "content": {
+      "type": "as"
+    }
+  },
+  {
+    "condition": {
+      "type": "<print>",
+      "parent_type": "print_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "print"
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "print_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": "<assert_stmt>",
+      "parent_type": "assert_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "assert"
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "assert_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": "<return>",
+      "parent_type": "return_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "return"
+    }
+  },
+  {
+    "condition": {
+      "type": "<del_stmt>",
+      "parent_type": "delete_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "del"
+    }
+  },
+  {
+    "condition": {
+      "type": "<raise>",
+      "parent_type": "raise_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "raise"
+    }
+  },
+  {
+    "condition": {
+      "type": "<from>",
+      "parent_type": "raise_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "from"
+    }
+  },
+  {
+    "condition": {
+      "type": "<pass>",
+      "parent_type": "pass_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "pass"
+    }
+  },
+  {
+    "condition": {
+      "type": "<break>",
+      "parent_type": "break_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "break"
+    }
+  },
+  {
+    "condition": {
+      "type": "<continue>",
+      "parent_type": "continue_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "continue"
+    }
+  },
+  {
+    "condition": {
+      "type": "<global>",
+      "parent_type": "global_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "global"
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "global_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": "<nonlocal>",
+      "parent_type": "nonlocal_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "nonlocal"
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "nonlocal_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": "<exec>",
+      "parent_type": "exec_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "exec"
+    }
+  },
+  {
+    "condition": {
+      "type": "<in>",
+      "parent_type": "exec_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "in"
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "exec_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": "<type>",
+      "parent_type": "type_alias_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": "type"
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "expression_statement"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": "<async_keyword>",
+      "parent_type": "for_in_clause"
+    },
+    "action": "replace",
+    "content": {
+      "type": "async"
+    }
+  },
+  {
+    "condition": {
+      "type": "<for>",
+      "parent_type": "for_in_clause"
+    },
+    "action": "replace",
+    "content": {
+      "type": "for"
+    }
+  },
+  {
+    "condition": {
+      "prev_sibling_field": "left",
+      "type": " ",
+      "parent_type": "for_in_clause"
+    },
+    "action": "replace",
+    "content": {
+      "type": "in"
+    }
+  },
+  {
+    "condition": {
+      "type": "<lambda>",
+      "parent_type": "lambda"
+    },
+    "action": "replace",
+    "content": {
+      "type": "lambda"
+    }
+  },
+  {
+    "condition": {
+      "type": "<lambda>",
+      "parent_type": "lambda_within_for_in_clause"
+    },
+    "action": "replace",
+    "content": {
+      "type": "lambda"
+    }
+  },
+  {
+    "condition": {
+      "type": "<not>",
+      "parent_type": "not_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": "not"
+    }
+  },
+  {
+    "condition": {
+      "type": "<and>",
+      "parent_type": "boolean_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": "and"
+    }
+  },
+  {
+    "condition": {
+      "type": "<or>",
+      "parent_type": "boolean_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": "or"
+    }
+  },
+  {
+    "condition": {
+      "type": "<times>",
+      "parent_type": "binary_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": "*"
+    }
+  },
+  {
+    "condition": {
+      "type": "<floordiv>",
+      "parent_type": "binary_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": "//"
+    }
+  },
+  {
+    "condition": {
+      "type": "<power>",
+      "parent_type": "binary_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": "**"
+    }
+  },
+  {
+    "condition": {
+      "type": "<lshift>",
+      "parent_type": "binary_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": "<<"
+    }
+  },
+  {
+    "condition": {
+      "type": "<rshift>",
+      "parent_type": "binary_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": ">>"
+    }
+  },
+  {
+    "condition": {
+      "type": "<l>",
+      "parent_type": "comparison_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": "<"
+    }
+  },
+  {
+    "condition": {
+      "type": "<le>",
+      "parent_type": "comparison_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": "<="
+    }
+  },
+  {
+    "condition": {
+      "type": "<eq>",
+      "parent_type": "comparison_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": "=="
+    }
+  },
+  {
+    "condition": {
+      "type": "<ne>",
+      "parent_type": "comparison_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": "!="
+    }
+  },
+  {
+    "condition": {
+      "type": "<ge>",
+      "parent_type": "comparison_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": ">="
+    }
+  },
+  {
+    "condition": {
+      "type": "<g>",
+      "parent_type": "comparison_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": ">"
+    }
+  },
+  {
+    "condition": {
+      "type": "<lgne>",
+      "parent_type": "comparison_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": "<>"
+    }
+  },
+  {
+    "condition": {
+      "type": "<in>",
+      "parent_type": "comparison_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": "in"
+    }
+  },
+  {
+    "condition": {
+      "type": "<is>",
+      "parent_type": "comparison_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": "is"
+    }
+  },
+  {
+    "condition": {
+      "type": "<is><not>",
+      "parent_type": "comparison_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": "is not"
+    }
+  },
+  {
+    "condition": {
+      "type": "<not><in>",
+      "parent_type": "comparison_operator"
+    },
+    "action": "replace",
+    "content": {
+      "type": "not in"
+    }
+  },
+  {
+    "condition": {
+      "type": "<augadd>",
+      "parent_type": "augmented_assignment"
+    },
+    "action": "replace",
+    "content": {
+      "type": "+="
+    }
+  },
+  {
+    "condition": {
+      "type": "<augsub>",
+      "parent_type": "augmented_assignment"
+    },
+    "action": "replace",
+    "content": {
+      "type": "-="
+    }
+  },
+  {
+    "condition": {
+      "type": "<augmul>",
+      "parent_type": "augmented_assignment"
+    },
+    "action": "replace",
+    "content": {
+      "type": "*="
+    }
+  },
+  {
+    "condition": {
+      "type": "<augdiv>",
+      "parent_type": "augmented_assignment"
+    },
+    "action": "replace",
+    "content": {
+      "type": "/="
+    }
+  },
+  {
+    "condition": {
+      "type": "<augmatmul>",
+      "parent_type": "augmented_assignment"
+    },
+    "action": "replace",
+    "content": {
+      "type": "@="
+    }
+  },
+  {
+    "condition": {
+      "type": "<augfloordiv>",
+      "parent_type": "augmented_assignment"
+    },
+    "action": "replace",
+    "content": {
+      "type": "//="
+    }
+  },
+  {
+    "condition": {
+      "type": "<augmod>",
+      "parent_type": "augmented_assignment"
+    },
+    "action": "replace",
+    "content": {
+      "type": "%="
+    }
+  },
+  {
+    "condition": {
+      "type": "<augpow>",
+      "parent_type": "augmented_assignment"
+    },
+    "action": "replace",
+    "content": {
+      "type": "**="
+    }
+  },
+  {
+    "condition": {
+      "type": "<augrshift>",
+      "parent_type": "augmented_assignment"
+    },
+    "action": "replace",
+    "content": {
+      "type": ">>="
+    }
+  },
+  {
+    "condition": {
+      "type": "<auglshift>",
+      "parent_type": "augmented_assignment"
+    },
+    "action": "replace",
+    "content": {
+      "type": "<<="
+    }
+  },
+  {
+    "condition": {
+      "type": "<augand>",
+      "parent_type": "augmented_assignment"
+    },
+    "action": "replace",
+    "content": {
+      "type": "&="
+    }
+  },
+  {
+    "condition": {
+      "type": "<augxor>",
+      "parent_type": "augmented_assignment"
+    },
+    "action": "replace",
+    "content": {
+      "type": "^="
+    }
+  },
+  {
+    "condition": {
+      "type": "<augor>",
+      "parent_type": "augmented_assignment"
+    },
+    "action": "replace",
+    "content": {
+      "type": "|="
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "_patterns"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": "<as>",
+      "parent_type": "as_pattern"
+    },
+    "action": "replace",
+    "content": {
+      "type": "as"
+    }
+  },
+  {
+    "condition": {
+      "type": "<yield>",
+      "parent_type": "yield"
+    },
+    "action": "replace",
+    "content": {
+      "type": "yield"
+    }
+  },
+  {
+    "condition": {
+      "type": "<from>",
+      "parent_type": "yield"
+    },
+    "action": "replace",
+    "content": {
+      "type": "from"
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "subscript"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "dictionary"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "_collection_elements"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "type": " ",
+      "parent_type": "expression_list"
+    },
+    "action": "replace",
+    "content": {
+      "type": ","
+    }
+  },
+  {
+    "condition": {
+      "next_sibling": [
+        "$comparison_operator",
+        "$not_operator",
+        "$boolean_operator",
+        "$lambda",
+        "$await",
+        "$binary_operator",
+        "$identifier",
+        "$string",
+        "$concatenated_string",
+        "$integer",
+        "$float",
+        "$true",
+        "$false",
+        "$none",
+        "$unary_operator",
+        "$attribute",
+        "$subscript",
+        "$call",
+        "$list",
+        "$list_comprehension",
+        "$dictionary",
+        "$dictionary_comprehension",
+        "$set",
+        "$set_comprehension",
+        "$tuple",
+        "$parenthesized_expression",
+        "$generator_expression",
+        "$ellipsis",
+        "$list_splat",
+        "$conditional_expression",
+        "$named_expression",
+        "$as_pattern"
+      ],
+      "type": "<if>",
+      "parent_type": "conditional_expression"
+    },
+    "action": "replace",
+    "content": {
+      "type": "if"
+    }
+  },
+  {
+    "condition": {
+      "prev_sibling": [
+        "$comparison_operator",
+        "$not_operator",
+        "$boolean_operator",
+        "$lambda",
+        "$await",
+        "$binary_operator",
+        "$identifier",
+        "$string",
+        "$concatenated_string",
+        "$integer",
+        "$float",
+        "$true",
+        "$false",
+        "$none",
+        "$unary_operator",
+        "$attribute",
+        "$subscript",
+        "$call",
+        "$list",
+        "$list_comprehension",
+        "$dictionary",
+        "$dictionary_comprehension",
+        "$set",
+        "$set_comprehension",
+        "$tuple",
+        "$parenthesized_expression",
+        "$generator_expression",
+        "$ellipsis",
+        "$list_splat",
+        "$conditional_expression",
+        "$named_expression",
+        "$as_pattern"
+      ],
+      "type": "<else>",
+      "parent_type": "conditional_expression"
+    },
+    "action": "replace",
+    "content": {
+      "type": "else"
+    }
+  },
+  {
+    "condition": {
+      "prev_sibling": "$string",
+      "next_sibling": "$string",
+      "type": "<concat>",
+      "parent_type": "concatenated_string"
+    },
+    "action": "delete"
+  },
+  {
+    "condition": {
+      "type": "<await>",
+      "parent_type": "await"
+    },
+    "action": "replace",
+    "content": {
+      "type": "await"
+    }
+  },
+  {
+    "condition": {
+      "parent_type": "module",
+      "type": "<line_sep>"
+    },
+    "action": "delete"
+  },
+  {
+    "condition": {
+      "parent_type": "_match_block",
+      "type": "<line_sep>"
+    },
+    "action": "delete"
+  },
+  {
+    "condition": {
+      "parent_type": "block",
+      "type": "<line_sep>"
+    },
+    "action": "delete"
+  },
+  {
+    "condition": {
+      "parent_type": "decorator",
+      "type": "<line_sep>"
+    },
+    "action": "delete"
+  },
+  {
+    "condition": {
+      "parent_type": "function_definition",
+      "type": "$identifier",
+      "field": "name"
+    },
+    "action": "custom_after",
+    "content": "empty_parameters"
+  },
+  {
+    "condition": {
+      "type": "$ellipsis"
+    },
+    "action": "custom_replace",
+    "content": "text_replace",
+    "params": {
+      "text": "..."
+    }
+  },
+  {
+    "condition": {
+      "type": "$true"
+    },
+    "action": "custom_replace",
+    "content": "text_replace",
+    "params": {
+      "text": "True"
+    }
+  },
+  {
+    "condition": {
+      "type": "$false"
+    },
+    "action": "custom_replace",
+    "content": "text_replace",
+    "params": {
+      "text": "False"
+    }
+  },
+  {
+    "condition": {
+      "type": "$none"
+    },
+    "action": "custom_replace",
+    "content": "text_replace",
+    "params": {
+      "text": "None"
+    }
+  }
+]

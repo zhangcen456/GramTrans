@@ -1,0 +1,15 @@
+{
+    "both":[
+        {"parent":"_simple_statements","original":[{"type":"$_newline","symbol":true}],"new":[]}
+    
+    ],
+    "ori_to_new":[
+        {"condition":{"type":"$_statement","prev_sibling_inline":"$_statement"},"action":"custom_before","content":"choice_comment_line_sep"},
+        {"condition":{"type":"$_space"},"action":"delete"}
+    ],
+    "new_to_ori":[
+        {"condition":{"parent_type":"module","type":"<line_sep>"},"action":"delete"},
+        {"condition":{"parent_type":"_match_block","type":"<line_sep>"},"action":"delete"},
+        {"condition":{"parent_type":"block","type":"<line_sep>"},"action":"delete"}
+    ]
+}
