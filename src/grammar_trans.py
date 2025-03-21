@@ -695,6 +695,7 @@ def get_information(node:Union[SymbolNode,StringNode,SentinelNode]):
     symbol=True if isinstance(node,SymbolNode) else False
     prev_sibs=dedup_list(node.get_prev())
     prev_sibs_field=set([sib.get_field_name() if sib else None for sib in prev_sibs])
+    prev_sibs_type=set([get_type(sib) for sib in prev_sibs])
     prev_inf={}
     if(len(prev_sibs)==1):
         prev_inf['prev_sibling']=get_type(prev_sibs[0])
@@ -702,14 +703,15 @@ def get_information(node:Union[SymbolNode,StringNode,SentinelNode]):
         prev_inf['prev_sibling_field']=next(iter(prev_sibs_field))
     next_sibs=dedup_list(node.get_next())
     next_sibs_field=set([sib.get_field_name() if sib else None for sib in next_sibs])
+    next_sibs_type=set([get_type(sib) for sib in next_sibs])
     next_inf={}
     if(len(next_sibs)==1):
         next_inf['next_sibling']=get_type(next_sibs[0])
     if(len(next_sibs_field)==1):
         next_inf['next_sibling_field']=next(iter(next_sibs_field))
     return {"type":node_type,"field":field_name,"symbol":symbol,
-            "prev_sibs":prev_sibs,"prev_sibs_field":prev_sibs_field,**prev_inf,
-            "next_sibs":next_sibs,"next_sibs_field":next_sibs_field,**next_inf}
+            "prev_sibs":prev_sibs,"prev_sibs_field":prev_sibs_field,"prev_sibs_type":prev_sibs_type,**prev_inf,
+            "next_sibs":next_sibs,"next_sibs_field":next_sibs_field,"next_sibs_type":next_sibs_type,**next_inf}
 
 def check_rule(rule,node:Node,information,applied_rules,conflict_rules):
     # information=get_information(node)
@@ -744,10 +746,26 @@ def check_rule(rule,node:Node,information,applied_rules,conflict_rules):
                             'index':rule['index'],"ori_elements":rule['ori_elements']}
                 ps.add_transformation(new_rule,applied_rules,conflict_rules)
                 break
-    
+
+condition_mapping={"prev_sibling":"prev_sibs_type","prev_sibling_field":"prev_sibs_field",
+                   "next_sibling":"next_sibs_type","next_sibling_field":"next_sibs_field"}
 def check_condition(information,condition):
     for k,v in condition.items():
-        if(k not in information or information[k]!=v):
+        if(isinstance(v,list)):
+            k=condition_mapping.get(k,k)
+        if(k not in information):
+            return False
+        if(isinstance(v,list)):
+            inf=information[k]
+            if(isinstance(inf,set)):
+                pass
+            elif(isinstance(inf,list)):
+                inf=set(inf)
+            else:
+                inf=set([inf])
+            if(not inf.__eq__(set(v))):
+                return False
+        elif(information[k]!=v):
             return False
     return True
 
@@ -836,10 +854,12 @@ def modify_grammar_json(grammar_rules,compiled_transform_rules,custom_modificati
         print("unapplied transformation rules:")
         for r in unapplied_rules:
             print(str(r))
+        print("")
     if(len(conflict_rules)>0):
         print("conflict occurs when applying transformation rules:")
         for it in conflict_rules:
             print(str(it))
+        print("")
     if(custom_modifications):
         for func_name in custom_modifications:
             globals()[func_name](new_grammar)

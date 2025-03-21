@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 from collections import defaultdict
 from .utils import *
-from .compiler import *
+from .parse_config import *
 from .wrapper import Wrapper
 from .language_config import language_config
 from .aux_class import SentinelNode,CustomException
@@ -62,6 +62,9 @@ class Unparser:
             writing_op(*operation[1],**operation[2])
         self.maybe_newline()
         return True
+    
+    def get_code(self):
+        return "\n".join(self.lines)
 
     def clear(self):
         self.lines.clear()
@@ -2047,10 +2050,7 @@ class PythonUnparser(Unparser):
     def visit_interpolation(self,node):
         index=[0]
         self.child(node,index=index,child_type="{")
-        #special case
-        self.skip_extras(node,index)
-        if(node.children[index[0]].children and node.children[index[0]].children[0].type=="{"):
-            self.maybe_space()
+        self.maybe_space()
         self.field(node,index=index,child_type="_f_expression",field_name="expression")
         self.optional(node,index=index,child_type="=")
         self.optional(node,index=index,child_type={"type":"field()","params":{"child_type":"type_conversion","field_name":"type_conversion"}})
@@ -2078,7 +2078,17 @@ class PythonUnparser(Unparser):
     def visit_format_specifier(self,node):
         index=[0]
         self.child(node,index=index,child_type=":")
-        self.write(str(node.text,encoding="utf8")[1:])
+        node_str=str(node.text,encoding='utf8')
+        prev_end=1
+        while index[0]<len(node.children):
+            child=Wrapper.get_children(node,index[0])
+            child_str=str(child.text,encoding='utf8')
+            cur_start=node_str.index(child_str)
+            self.write(node_str[prev_end:cur_start])
+            prev_end=cur_start+len(child_str)
+            with self.alias("interpolation","format_expression"):
+                self.child(node,index,child_type="format_expression")
+        self.write(str(node.text,encoding="utf8")[prev_end:])
         return [len(node.children)]
     
     def visit_type_conversion(self,node):#no children

@@ -371,6 +371,8 @@ def unify_form(items):
     if(isinstance(items,list)):
         return [unify_form(i) for i in items]
     elif(isinstance(items,dict)):
+        if(items.get("anchor",False)):
+            return items
         #infer intree
         if("type" in items and "intree" not in items):
             intree=not get_symbol_name(items['type']) in language_config.inline_symbols
@@ -618,7 +620,64 @@ def get_symbol_name(name):
         return name[1:]
     else:
         return None
+    
+def inline_prev_sibling(conditions,grammar_rules,phase):
+    if('prev_sibling' in conditions):
+        if(isinstance(conditions['prev_sibling'],str)):
+            symbol_name=get_symbol_name(conditions['prev_sibling'])
+            if(symbol_name in language_config.custom_externals):
+                v=conditions['prev_sibling']
+                del conditions['prev_sibling']
+                warning(f"{phase}: delete prev_sibling:{v} (parent type:{conditions.get('parent_type','undefined')})")
+            elif(symbol_name in language_config.inline_symbols):
+                v=conditions['prev_sibling']
+                lasts=dedup_list(get_leaf_last(grammar_rules,get_symbol_name(v)))
+                lasts=[get_type(la) for la in lasts]
+                if(len(lasts)==1):
+                    lasts=lasts[0]
+                conditions['prev_sibling']=lasts
+                warning(f"{phase}: change inline prev_sibling:{v} to prev_sibling:{str(lasts)} (parent type:{conditions.get('parent_type','undefined')})")
+        elif(isinstance(conditions['prev_sibling'],list)):
+            prev_siblings=list()
+            for sym in conditions['prev_sibling']:
+                symbol_name=get_symbol_name(sym)
+                if(symbol_name in language_config.custom_externals):
+                    warning(f"{phase}: delete prev_sibling:{symbol_name} (parent type:{conditions.get('parent_type','undefined')})")
+                elif(symbol_name in language_config.inline_symbols):
+                    lasts=dedup_list(get_leaf_last(grammar_rules,symbol_name))
+                    lasts=[get_type(la) for la in lasts]
+                    prev_siblings.extend(lasts)
+                    warning(f"{phase}: change inline prev_sibling:{symbol_name} to prev_sibling:{str(lasts)} (parent type:{conditions.get('parent_type','undefined')})")
+            conditions['prev_sibling']=prev_siblings
 
+def inline_next_sibling(conditions,grammar_rules,phase):
+    if('next_sibling' in conditions):
+        if(isinstance(conditions['next_sibling'],str)):
+            symbol_name=get_symbol_name(conditions['next_sibling'])
+            if(symbol_name in language_config.custom_externals):
+                v=conditions['next_sibling']
+                del conditions['next_sibling']
+                warning(f"{phase}: delete next_sibling:{v} (parent type:{conditions.get('parent_type','undefined')})")
+            elif(symbol_name in language_config.inline_symbols):
+                v=conditions['next_sibling']
+                firsts=dedup_list(get_leaf_first(grammar_rules,get_symbol_name(v)))
+                firsts=[get_type(la) for la in firsts]
+                if(len(firsts)==1):
+                    firsts=firsts[0]
+                conditions['next_sibling']=firsts
+                warning(f"{phase}: change inline next_sibling:{v} to next_sibling:{str(firsts)} (parent type:{conditions.get('parent_type','undefined')})")
+        elif(isinstance(conditions['next_sibling'],list)):
+            next_siblings=list()
+            for sym in conditions['next_sibling']:
+                symbol_name=get_symbol_name(sym)
+                if(symbol_name in language_config.custom_externals):
+                    warning(f"{phase}: delete next_sibling:{symbol_name} (parent type:{conditions.get('parent_type','undefined')})")
+                elif(symbol_name in language_config.inline_symbols):
+                    firsts=dedup_list(get_leaf_first(grammar_rules,symbol_name))
+                    firsts=[get_type(la) for la in firsts]
+                    next_siblings.extend(firsts)
+                    warning(f"{phase}: change inline next_sibling:{symbol_name} to next_sibling:{str(firsts)} (parent type:{conditions.get('parent_type','undefined')})")
+            conditions['next_sibling']=next_siblings
 
 def check_rules(py_to_spy_rules,spy_to_py_rules,grammar_rules,new_grammar_rules):
     # only string(anonymous nodes) can be inserted by rules(custom rules needed for named children)
@@ -629,26 +688,8 @@ def check_rules(py_to_spy_rules,spy_to_py_rules,grammar_rules,new_grammar_rules)
     condition_map=defaultdict(list)
     for i,r in enumerate(py_to_spy_rules):
         conditions=r['condition']
-        if('prev_sibling' in conditions and get_symbol_name(conditions['prev_sibling']) in language_config.custom_externals):
-            v=conditions['prev_sibling']
-            del conditions['prev_sibling']
-            warning(f"ori to new: delete prev_sibling:{v} (parent type:{conditions.get('parent_type','undefined')})")
-        elif('prev_sibling' in conditions and get_symbol_name(conditions['prev_sibling']) in language_config.inline_symbols):
-            v=conditions['prev_sibling']
-            lasts=dedup_list(get_leaf_last(grammar_rules,get_symbol_name(v)))
-            lasts=[get_type(la) for la in lasts]
-            if(len(lasts)==1):
-                lasts=lasts[0]
-            conditions['prev_sibling']=lasts
-            warning(f"ori to new: change inline prev_sibling:{v} to prev_sibling:{str(lasts)} (parent type:{conditions.get('parent_type','undefined')})")
-        if('next_sibling' in conditions and get_symbol_name(conditions['next_sibling']) in language_config.inline_symbols):
-            v=conditions['next_sibling']
-            firsts=dedup_list(get_leaf_first(grammar_rules,get_symbol_name(v)))
-            firsts=[get_type(fi) for fi in firsts]
-            if(len(firsts)==1):
-                firsts=firsts[0]
-            conditions['next_sibling']=firsts
-            warning(f"ori to new: change inline next_sibling:{v} to next_sibling:{str(firsts)} (parent type:{conditions.get('parent_type','undefined')})")
+        inline_prev_sibling(conditions,grammar_rules,"ori to new")
+        inline_next_sibling(conditions,grammar_rules,"ori to new")
         if(len(conditions)==0):
             try:
                 error(f"ori to new: empty condition for rule {str(r)}")
@@ -677,31 +718,34 @@ def check_rules(py_to_spy_rules,spy_to_py_rules,grammar_rules,new_grammar_rules)
     condition_map=defaultdict(list)
     for i,r in enumerate(spy_to_py_rules):
         conditions=r['condition']
-        if(get_symbol_name(conditions.get("type",None)) in language_config.inline_symbols and "next_sibling" in conditions):
-            warning("new_to_ori: for inline symbols, next sibling may be inaccurate")
-            del conditions['next_sibling']
-        if(r['action']=='insert_before' and get_symbol_name(conditions.get("type",None)) in language_config.inline_symbols):
-            v=conditions['type']
-            firsts=dedup_list(get_leaf_first(new_grammar_rules,get_symbol_name(v)))
-            firsts=[get_type(fi) for fi in firsts]
-            if(len(firsts)==1):
-                firsts=firsts[0]
-            conditions['type']=firsts
-            warning(f"new to ori: insert node before inline symbol {v} is changed to insert before {firsts} \n(parent type:{conditions.get('parent_type','undefined')})")
-        if("prev_sibling" in conditions and get_symbol_name(conditions['prev_sibling']) in language_config.inline_symbols):
-            v=conditions['prev_sibling']
-            lasts=dedup_list(get_leaf_last(new_grammar_rules,get_symbol_name(v)))
-            lasts=[get_type(la) for la in lasts]
-            if(len(lasts)==1):
-                lasts=lasts[0]
-            conditions['prev_sibling']=lasts
-            warning(f"new to ori: change inline prev_sibling:{v} to prev_sibling:{str(lasts)} (parent type:{conditions.get('parent_type','undefined')})")
-        if("next_sibling" in conditions and get_symbol_name(conditions['next_sibling']) in language_config.inline_symbols):
-            v=conditions['next_sibling']
-            firsts=dedup_list(get_leaf_first(new_grammar_rules,get_symbol_name(v)))
-            firsts=[get_type(fi) for fi in firsts]
-            conditions['next_sibling']=firsts
-            warning(f"new to ori: change inline next_sibling:{v} to next_sibling:{str(firsts)} (parent type:{conditions.get('parent_type','undefined')})")
+        if(isinstance(conditions.get("type",None),str)):
+            symbol_name=get_symbol_name(conditions.get("type",None))
+            if(symbol_name in language_config.inline_symbols and "next_sibling" in conditions):
+                warning(f"new_to_ori: for inline symbol {symbol_name}, next sibling may be inaccurate")
+                del conditions['next_sibling']
+            if(r['action']=='insert_before' and symbol_name in language_config.inline_symbols):
+                v=conditions['type']
+                firsts=dedup_list(get_leaf_first(new_grammar_rules,get_symbol_name(v)))
+                firsts=[get_type(fi) for fi in firsts]
+                if(len(firsts)==1):
+                    firsts=firsts[0]
+                conditions['type']=firsts
+                warning(f"new to ori: insert node before inline symbol {v} is changed to insert before {firsts} \n(parent type:{conditions.get('parent_type','undefined')})")
+        elif(isinstance(conditions.get("type",None),list)):
+            symbol_types=list()
+            for sym in conditions.get("type"):
+                symbol_name=get_symbol_name(sym)
+                if(symbol_name in language_config.inline_symbols and "next_sibling" in conditions):
+                    warning(f"new_to_ori: for inline symbol {symbol_name}, next sibling may be inaccurate")
+                    del conditions['next_sibling']
+                    symbol_types.append(symbol_name)
+                if(r['action']=='insert_before' and symbol_name in language_config.inline_symbols):
+                    firsts=dedup_list(get_leaf_first(new_grammar_rules,symbol_name))
+                    firsts=[get_type(fi) for fi in firsts]
+                    symbol_types.extend(firsts)
+                    warning(f"new to ori: insert node before inline symbol {symbol_name} is changed to insert before {firsts} \n(parent type:{conditions.get('parent_type','undefined')})")
+        inline_prev_sibling(conditions,grammar_rules,"new to ori")
+        inline_next_sibling(conditions,grammar_rules,"new to ori")
         if(len(conditions)==0):
             try:
                 error(f"new to ori: empty condition for rule {str(r)}")

@@ -4,7 +4,7 @@ import ast
 from tree_sitter import Node as tree_sitter_node
 
 #define a wrapper node for tree-sitter nodes
-from .compiler import read_tree_rules,check_conditions,get_rules_for_parent,find_specific_rule
+from .parse_config import read_tree_rules,check_conditions,get_rules_for_parent,find_specific_rule
 # tree_rules=read_tree_rules()
 from .language_config import language_config
 from .aux_class import SentinelNode,StringNode,AuxInf

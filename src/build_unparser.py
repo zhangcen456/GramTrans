@@ -1,7 +1,7 @@
 import json
 from .unparser import *
 from .wrapper import Wrapper
-from .compiler import register_custom_rules
+from .parse_config import register_custom_rules
 
 def build_unparser(ori_to_new,new_to_ori,filepath):
     with open("config.json",'r') as f:

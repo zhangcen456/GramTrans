@@ -1,7 +1,7 @@
 {
   "ori_to_new": [
-    "raise_exception",
-    "choice_comment_line_sep"
+    "choice_comment_line_sep",
+    "raise_exception"
   ],
   "new_to_ori": [
     "text_replace",
