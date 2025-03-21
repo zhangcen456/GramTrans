@@ -1,4 +1,4 @@
-## GramTrans: A Universal Tool for the Design of AI-oriented programming language grammar
+## GramTrans: A Research Tool for the Design of AI-oriented programming language grammar
 ### Introduction
 GramTrans is a configurable tool designed to simplify the development of toolkits for AI-oriented grammars. 
 Built on top of [tree-sitter](https://github.com/tree-sitter/tree-sitter), GramTrans generates two parsers and two unparsers. The parsers convert source code into parse trees, while the unparsers perform grammar-aware transformations during the unparsing process. By specifying grammar differences in a user-defined configuration file, users can define how code should be transformed without manually implementing the conversion logic.
@@ -40,7 +40,7 @@ In this case, the keyword `import` in the original grammar is transformed to `<i
 ```
 
 ##### Handling multiple keywords
-In some cases, keywords do not have a one-to-one correspondence. For example, the `if_statement` rule in Python:
+In some cases, keywords do not have an one-to-one correspondence. For example, the `if_statement` rule in Python:
 ```
 if_statement: $ => seq(
     'if',
@@ -67,7 +67,8 @@ Here, the keyword `if` is transformed to `<if_stmt>`, and the `:` is removed. Th
 ```
 Elements in the `original` and `new` lists must appear in the same order as they do in the grammar, with no elements skipped.
 
-The default value of attribute `anchor` is `false`. Explicitly assigning a `true` value indicates the element is unchanged and used to express relative positioning. The number of anchors in `original` and `new` should be the same and have one-to-one correspondence in order.
+We introduce anchor points to provide positional references by setting the `anchor` attribute to `true`. These symbols remain unchanged during the transformation.
+The number of anchors in `original` and `new` should be the same and have one-to-one correspondence in order.
 
 In this example, the keyword `:` is added after the children whose field name is `condition` when transforming from new grammar back to the original. 
 
@@ -106,10 +107,10 @@ Correct transformation rules:
 {"parent":"with_statement","original":["with",{"type":"$with_clause","anchor":true},":"],
     "new":["<with_stmt>",{"type":"$with_clause","anchor":true}]}
 ```
-The symbol `$` preceding `$with_clause` indicates that this refers to a grammar symbol, specifically the `with_clause` rule.
+The symbol `$` preceding `$with_clause` indicates that this refers to a non-terminal symbol, specifically the `with_clause` rule.
 
 ##### Attributes
-Expressing an element as a simple string, such as `"if"`, is equivalent to specifying its type, e.g., `{"type":"if"}`. Elements can also include other attributes.
+Expressing an element as a simple string, such as `"if"`, is equivalent to specifying its type, e.g., `{"type":"if"}`. Elements can also include other attributes for more accurate positioning.
 For the `parameters` rule, the original grammar rule is:
 ```
 parameters: $ => seq(
@@ -173,7 +174,7 @@ In this case, the parentheses should be removed when transforming from the origi
 ```
 
 #### Custom rules
-For more complex transformations beyond inserting or deleting anonymous nodes in tree-sitter generated parse trees, custom transformation functions can be defined in `src/custom_rules`.
+For more complex transformations beyond basic edits of terminal symbols, custom transformation functions can be defined in `src/custom_rules`.
 
 ##### Transforming from original grammar to the new one
 For example, to separate two statements using either `<line_sep>` or comments, the transform rule would be:
@@ -185,7 +186,7 @@ For example, to separate two statements using either `<line_sep>` or comments, t
 
 Inline rules in tree-sitter do not create nodes in the syntax tree, so if `prev_sibling` refers to inline rule names, it will be transformed to all possible node types that can serve as the first node of the inline rule. The same applies to `next_sibling`.
 
-For rules transforming from the original grammar to the new one, `prev_sibling_inline` can be used as an alternative. This allows the transformation rule to also be written as:
+For rules transforming from the original grammar to the new one, `prev_sibling_inline` can be used as an alternative. This allows the conversion rule to also be written as:
 ```
 {"condition":{"type":"$_statement","prev_sibling_inline":"$_statement"},"action":"custom_before","content":"choice_comment_line_sep"}
 ```
@@ -202,7 +203,7 @@ def choice_comment_line_sep(self,node,**kwargs):
 - The first argument of the function, `self`, refers to the unparser instance. 
 - The `node` parameter represents the current node being processed.
 
-The following functions are used to modify the regenerated code:
+The following functions can be used to modify the regenerated code:
 - `write(self,text)` appends the `text` to the generated code.
 - `write_comment(self,comment_content)` writes the `comment_content` if it is at the start of a new line, otherwise records the comment. 
 - `maybe_newline(self,add_comment)` starts a new line in the generation process. If `add_comment` is set to `True`, recorded comments are appended to the end of the previous line if they exist.
@@ -273,26 +274,30 @@ def empty_parameters(self,index,**args):
 The `params` attribute in custom transform rules specifies the arguments that will be passed to the custom transform function.
 For example, to modify the `text` of the syntax node `true`, the transform rule would be:
 ```
-{"condition":{"parent_type":"true","type":"$_node_content"},"action":"custom_before","content":"text_replace","params":{"text":"True"}}
+{"condition":{"type":"$true"},"action":"custom_replace","content":"text_replace","params":{"text":"True"}}
 ```
 The definition of the custom transform function `text_replace` is:
 ```
 def text_replace(self,index,**args):
     text=args['text']
-    self.text=text.encode("utf8")
+    node_type=self.children[index].type
+    self.children[index]=TreeNode(node_type,True,list(),list(),text.encode("utf8"))
+    return index
 ```
 
 ##### Formatting
-`$_space` refers to spaces added during the unparsing process to delimit tokens. To eliminate these spaces, use the following transformation rule:
+`$_space` refers to spaces added during the unparsing process to delimit tokens. To eliminate these spaces, use the following conversion rule:
 ```
 {"condition":{"type":"$_space"},"action":"delete"}
 ```
 
 ### Running GramTrans
+To begin using GramTrans, first download the grammar file for the original grammar provided by tree-sitter.
+
 #### Parsing the configuration file
 To generate the rules for transforming between the original and new grammar formats, run the following command:
 ```
-python compile_rules.py --rule_path ${path_of_transformation_rule_file}
+python parse_configuration.py --rule_path ${path_of_configuration_file}
 ```
 This will generate three JSON files:
 - The `*.ori_to_new.json` file contains rules for transforming code from the original grammar to the new grammar.
@@ -309,8 +314,7 @@ During postprocessing, certain conditions may be modified:
 - For `new_to_ori` rules, if the `type` condition refers to an inline rule name, the `next_sibling` condition will be removed.
 
 #### Generating the new parser
-Once the transformation rules are compiled, they will be applied to update the `grammar.json` file. 
-Unidirectional 
+Once the transformation rules are parsed, they will be applied to update the `grammar.json` file. 
 For complicated cases, such as a custom transformation function is integrated in the process, manual intervention will be required with these transformation rules flagged.
 
 The paths for the original grammar file and the new grammar file are defined in `config.json`. Ensure that these paths are correctly set before proceeding.
@@ -319,7 +323,7 @@ To regenerate the parser based on the updated grammar file, run the following co
 ```
 tree-sitter generate ${path_of_new_grammar_json}
 ```
-After successfully generating the parser, use the following API call to build the language library:
+After successfully generating the parser, use the following API call to build the dynamic library:
 ```
 from tree_sitter import Language
 Language.build_library()
@@ -332,13 +336,13 @@ from src.build_unparser import build_unparser
 ```
 To transform from the original grammar to new grammar:
 ```
-unparser=build_unparser(ori_to_new=True,new_to_ori=False,filepath=${path_of_ori_to_new_transformation_rule_file})
+unparser=build_unparser(ori_to_new=True,new_to_ori=False,filepath=${path_of_ori_to_new_conversion_rule_file})
 unparser.unparse(parse_tree)
 ```
 `parse_tree` refers to the parse tree generated by tree-sitter.
 
 To transform from the new grammar to original grammar:
 ```
-unparser=build_unparser(ori_to_new=False,new_to_ori=True,filepath=${path_of_new_to_ori_transformation_rule_file})
+unparser=build_unparser(ori_to_new=False,new_to_ori=True,filepath=${path_of_new_to_ori_conversion_rule_file})
 unparser.unparse(parse_tree)
 ```
